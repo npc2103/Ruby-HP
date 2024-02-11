@@ -1,0 +1,147 @@
+
+body {
+    margin: auto;
+    text-align: center;
+    
+  }
+.resultinfo{
+    display: flex;
+}
+.header{
+    border-top: 5px solid red;
+    border-bottom: 1px solid red;
+    display: flex;
+    justify-content: center;
+    header {
+        width: 800px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+    }
+    @media (max-width: 768px) {
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+    
+        }
+    }
+}
+
+.search_menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: space-around;
+    padding: 3%;
+    border-bottom: 3px solid black;
+    background-color: #f2f2f2; 
+  }
+
+.shopinfo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 3%;
+    border-bottom: 1px solid rgb(214, 203, 203);
+    background-color: #f2f2f2; 
+    @media (max-width: 768px) {
+        padding-top: 10%;
+        padding-bottom: 10%;
+    }
+
+    .detailadd {
+        display: flex;
+        @media (max-width: 2000px) {
+            padding: 2%;
+            border: 1px solid black; 
+            box-shadow: 5px 5px 10px rgba(228, 222, 222, 0.5); 
+            border-radius: 10px; 
+            background-color: white; 
+        }
+        
+        @media (max-width: 768px) {
+            flex-direction: column;
+        }
+
+        .detailpoint{
+            display: flex;
+            flex-direction: column;
+
+            .detail{
+                width: 800px;
+                display: flex;
+                align-content: center;
+                align-self: center;
+                
+                .photo {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                table{
+                    border-collapse:collapse;
+                    width: 100%;
+                }
+                
+                @media (max-width: 768px) {
+                    width: auto;
+                    flex-direction: column;
+                    justify-content: center;  
+                    align-items: center;  
+                    flex-wrap: wrap;
+                    .photo {
+                        width: auto;  
+                    }
+                    table{
+                        width: auto;  
+                    }
+                }
+            }
+            .point {
+                width: 800px;
+                table{
+                    border-collapse:collapse;
+                    width: 100%;
+                    .plas{
+                        p{
+                            color: rgb(138, 19, 19);
+                        }
+                    }
+                    .minus{
+                        p{
+                            color: rgb(32, 32, 192);
+                        }
+                    }
+                }
+                @media (max-width: 768px) {
+                    width: 100%;
+                    tr {
+                      display: flex;
+                      flex-direction: column;
+                      width: 100%;
+                    }
+                    td {
+                      width: 100%;
+                      border: none;//応急処置
+                      border-bottom: 1px solid #000;
+                    }
+                }
+            }
+        }
+        .add{
+            display: flex;
+            flex-direction: column;
+            @media (max-width: 768px) {
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+      }
+}

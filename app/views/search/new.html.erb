@@ -1,0 +1,67 @@
+<script>
+document.addEventListener('turbo:load', function() {
+  disableRadiusButtons();
+})
+
+window.onload = function() {
+  disableRadiusButtons();
+}
+
+function getLocation() {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    document.getElementById('latitude').value = position.coords.latitude;
+    document.getElementById('longitude').value = position.coords.longitude;
+    enableRadiusButtons();
+  });
+}
+
+function setRadius(value) {
+  document.getElementById('distance').value = value;
+  document.getElementById('search_form').submit();
+}
+
+function disableRadiusButtons() {
+  var buttons = document.getElementsByClassName('radius-button');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].disabled = true;
+  }
+}
+
+function enableRadiusButtons() {
+  var buttons = document.getElementsByClassName('radius-button');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].disabled = false;
+  }
+}
+</script>
+<div class="header">
+  <header>
+    <h1>Finding Yummy</h1>
+    <div class="header_menue">
+      <% if user_signed_in? %>
+        <%= link_to 'マイページ', mypage_path, class: 'header_mypage', target: "_blank" %>
+        <%= button_to 'Sign out', destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to 'ログイン', new_user_session_path, class: 'header_mypage' %>
+      <% end %>
+    </div>
+  </header>
+</div>
+<%= form_with url: search_index_path, method: :get, local: true, html: { id: 'search_form' } do |form| %>
+  <%= button_tag '現在位置を取得', type: 'button', onclick: 'getLocation()' %>
+  <%= hidden_field_tag :latitude, id: 'latitude' %>
+  <%= hidden_field_tag :longitude, id: 'longitude' %>
+  <%= hidden_field_tag :distance, id: 'distance' %>
+
+  <%= button_tag '300m', type: 'button', onclick: 'setRadius(1)', class: 'radius-button' %>
+  <%= button_tag '500m', type: 'button', onclick: 'setRadius(2)', class: 'radius-button' %>
+  <%= button_tag '1km', type: 'button', onclick: 'setRadius(3)', class: 'radius-button' %>
+  <%= button_tag '2km', type: 'button', onclick: 'setRadius(4)', class: 'radius-button' %>
+  <%= button_tag '3km', type: 'button', onclick: 'setRadius(5)', class: 'radius-button' %>
+<% end %>
+
+<div class="footer_area">
+  <footer>
+      <p>Powered by <a href="http://webservice.recruit.co.jp/">ホットペッパーグルメ Webサービス</a></p>
+  </footer>
+</div>

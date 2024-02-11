@@ -1,0 +1,90 @@
+<div class="header">
+  <header>
+    <h1>Finding Yummy</h1>
+    <div class="header_menue">
+      <% if user_signed_in? %>
+        <%= link_to 'マイページ', mypage_path, class: 'header_mypage', target: "_blank" %>
+        <!-- 本当はリンクが良かったのですが、どう頑張ってもGETでしか送れず諦めました -->
+        <%= button_to 'Sign out', destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to 'ログイン', new_user_session_path, class: 'header_mypage' %>
+      <% end %>
+    </div>
+  </header>
+</div>
+
+
+<div class="show_shopinfo">
+  <img class="shop-image" src="<%= @shop['photo']['pc']['l'] %>" alt="<%= @shop['name'] %>の画像">
+
+  <h1><%= @shop['name'] %></h1>
+  <%= form_with url: new_mypage_path, method: :post do |form| %>
+    <div class="add">
+      <% if user_signed_in? && @shop['book'] == 0 %>
+        <%= form.hidden_field :shop_id, value: @shop['id'] %>
+        <%= form.hidden_field :shop_name, value: "#{@shop['name']}/#{@shop['catch']}" %>
+        <%= form.hidden_field :scroll_position, id: "scroll_position" %>
+        <%= form.submit "ブックマーク" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  
+  <div class="name_area">
+    <% if @shop['genre'] %>
+      <p><%= @shop['genre']['name'] %></p>
+      <% if @shop['genre']['sub'] %>
+        <p><%= @shop['genre']['sub'] %></p>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="address_area">
+    <p><%= @shop['address'] %></p>
+    <p><%= @shop['station_name'] %></p>
+    <p><%= @shop['access'] %></p>
+  </div>
+
+  <div class="distance_area"><p><%= @shop['distance'] %></p></div>
+
+  <div class="point_area">
+      <p>ポイント:Good:<%= @shop['point']['good'] %> , Bad:<%= @shop['point']['bad'] %></p>
+      <% if user_signed_in? %>
+      <%= form_with url: create_mypage_path, method: :post do |form| %>
+        <%= form.hidden_field :shop_id, value: @shop['id'] %>
+        <%= form.label :good %>
+        <%= form.number_field :good, in: 1000..10000, step: 1000 %>
+        <%= form.label :bad %>
+        <%= form.number_field :bad, in: 1000..10000, step: 1000 %>
+        <%= form.submit 'ポイントを付ける' %>
+      <% end %>
+      <% end %>
+  </div>
+
+  <div class="open_area">
+    <p>ランチ：<%= @shop['lunch'] %></p>
+    <p><%= @shop['open'] %></p>
+    <p><%= @shop['close'] %></p>
+    <p>23時以降も: <%= @shop['midnight'] %></p>
+  </div>
+
+  <div class="money_area">
+    <p><%= @shop['budget']['average'] %></p>
+    <p><%= @shop['budget_memo'] %></p>
+  </div>
+
+  <div class="link_area">
+    <a href="<%= @shop['urls']['pc'] %>" target="_blank" rel="noopener noreferrer">予約する（外部サイト）</a> <br>
+    <%= link_to "地図を開く", "https://www.google.com/maps/search/?api=1&query=#{URI.encode_www_form_component(@shop['address'])}", target: "_blank" %> <br>
+    <%= link_to "店舗URL", @shop['urls']['pc'], target: "_blank" %>  <br>
+    <% if @shop['coupon_urls'] %>
+      <a href="<%= @shop['coupon_urls']['pc'] %>" target="_blank" rel="noopener noreferrer">クーポンURL（外部サイト）</a> <br>
+    <% end %>
+  </div>
+</div>
+<div class="footer_area">
+  <footer>
+    <p>Powered by <a href="http://webservice.recruit.co.jp/">ホットペッパーグルメ Webサービス</a></p>
+  </footer>
+</div>
+

@@ -1,0 +1,36 @@
+<div class="header">
+  <header>
+    <h1>Finding Yummy</h1>
+  </header>
+</div>
+
+<h1>マイページ</h1>
+<%= link_to '編集', edit_user_registration_path %> <br>
+<strong>ユーザー名:</strong>
+<p><%= @user.username %></p>
+
+<strong>メール:</strong>
+<p><%= @user.email %></p>
+
+<strong>ポイント:</strong>
+<p><%= @user.points %>P</p>
+<%= button_to 'ポイント獲得', increase_points_mypage_path %> <br>
+
+
+<strong>ブックマークリスト:</strong>
+<% @book.each do |bookmark| %>
+  <div class="booklist">
+    <p><%= bookmark.shop_name %></p>
+    <p>登録日時: <%= bookmark.created_at %></p>
+    <%= form_with url: destroy_mypage_path, method: :post do |form| %>
+        <%= form.hidden_field :bookmark, value: bookmark.id %>
+        <%= form.submit "消去" %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="footer_area">
+  <footer>
+      <p>Powered by <a href="http://webservice.recruit.co.jp/">ホットペッパーグルメ Webサービス</a></p>
+  </footer>
+</div>

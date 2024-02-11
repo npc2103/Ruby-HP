@@ -1,0 +1,149 @@
+<%= stylesheet_link_tag 'search_index' %>
+<div class="header">
+  <header>
+    <h1>Finding Yummy</h1>
+    <div class="header_menue">
+      <% if user_signed_in? %>
+        <%= link_to 'マイページ', mypage_path, class: 'header_mypage', target: "_blank" %>
+        <%= button_to 'Sign out', destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to 'ログイン', new_user_session_path, class: 'header_mypage' %>
+      <% end %>
+    </div>
+  </header>
+</div>
+<div class="searchmenu">
+  <%= form_with url: search_index_path, method: :get, class: "search_menu" do |form| %>
+    <%= form.hidden_field :latitude, value: params[:latitude] %>
+    <%= form.hidden_field :longitude, value: params[:longitude] %>
+    <%= form.hidden_field :distance, value: params[:distance] %>
+    <%= form.hidden_field :page, value: @page %>
+    
+
+      <div class="money">
+        <%= form.label :average_price, "平均価格" %>
+        <%= form.select :average_price, options_for_select([
+          ['指定しない', '0'],
+          ['～500円', 'B009'],
+          ['501～1000円', 'B010'],
+          ['1001～1500円', 'B011'],
+          ['1501～2000円', 'B001'],
+          ['2001～3000円', 'B002'],
+          ['3001～4000円', 'B003'],
+          ['4001～5000円', 'B008'],
+          ['5001～7000円', 'B004'],
+          ['7001～10000円', 'B005'],
+          ['10001～15000円', 'B006'],
+          ['15001～20000円', 'B012'],
+          ['20001～30000円', 'B013'],
+          ['30001円～', 'B014']
+        ]) %>
+      </div>
+      <div class="genre">
+        <%= form.label :genre, "ジャンル" %>
+        <%= form.select :genre, options_for_select([
+          ['指定しない', '0'],
+          ['居酒屋', 'G001'],
+          ['ダイニングバー・バル', 'G002'],
+          ['創作料理', 'G003'],
+          ['和食', 'G004'],
+          ['洋食', 'G005'],
+          ['イタリアン・フレンチ', 'G006'],
+          ['中華', 'G007'],
+          ['焼肉・ホルモン', 'G008'],
+          ['韓国料理', 'G017'],
+          ['アジア・エスニック料理', 'G009'],
+          ['各国料理', 'G010'],
+          ['カラオケ・パーティ', 'G011'],
+          ['バー・カクテル', 'G012'],
+          ['ラーメン', 'G013'],
+          ['お好み焼き・もんじゃ', 'G016'],
+          ['カフェ・スイーツ', 'G014'],
+          ['その他グルメ', 'G015']
+        ]) %>
+      </div>
+      <div class="point">
+        <%= form.label :point, "ポイント" %>
+        <%= form.select :point, options_for_select([
+          ['指定しない', '0'],
+          ['＋ポイントが高い順', '1'],
+          ['ーポイントが高い順', '2'],
+        ]) %>
+      </div>
+      <%= form.submit "ソート開始" %>
+  <% end %>
+</div>
+<div class="resaltinfo">
+  <% @shops.each do |shop| %>
+    <div class="shopinfo">
+      <div class="detailadd">
+        <div class="detailpoint">
+          <div class="detail">
+            <div class="photo">
+              <!-- 写真 -->
+              <% if shop['photo']['pc']['l'].present? %>
+                <img src="<%= shop['photo']['pc']['l'] %>" alt="<%= shop['name'] %>の大きな写真（PC向け）">
+              <% end %>
+            </div>
+            <table border="1">
+              <tr>
+                <!-- 名前、キャッチ-->
+                <td colspan="3">
+                  <strong><%= link_to "#{shop['name']}/#{shop['catch']}", search_path(id: shop['id']) %></strong>
+                </td>
+              </tr>
+              <tr align="center">
+                <td colspan="3">
+                  <!-- アクセス、ジャンル、サブジャンル -->
+                  <%= shop['address'] %> <br>
+                  <% if shop['genre'] && shop['sub_genre'] %>
+                    <%= shop['access'] %>/<%= shop['genre']['name'] %><%= shop['sub_genre']['name'] %>
+                  <% elsif shop['genre'] %>
+                    <%= shop['access'] %>/<%= shop['genre']['name'] %>
+                  <% else %>
+                    <%= shop['access'] %>
+                  <% end %>
+                </td>
+              </tr>
+              <tr>
+                <!-- km now 円 -->
+                <td><%= shop['distance'] %></td>
+                <td>　<%= shop['now'] %>　</td>
+                <td><%= shop['budget']['average'] || '情報なし' %></td>
+              </tr>
+            </table>
+          </div>
+          <div class="point">
+            <table border="1">
+              <tr>
+                <td class="plas">
+                  <strong><p>  <%= shop['point']['good'] %>P  </p></strong>
+                </td>
+                <td class="minus">
+                  <strong><p>  <%= shop['point']['bad'] %>P  </p></strong>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="add">
+            <%= link_to "地図を開く", "https://www.google.com/maps/search/?api=1&query=#{URI.encode_www_form_component(shop['address'])}", target: "_blank" %>
+            <%= link_to "店舗URL", shop['urls']['pc'], target: "_blank" %> 
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+</div>
+
+
+<div class="footer_area">
+  <div class="next_link">
+    <%= link_to '前のページ', search_index_path(page: @page - 1, latitude: params[:latitude], longitude: params[:longitude], distance: params[:distance]) if @page > 1 %>
+    <% if (@page * @num) < @total_results %>
+      <%= link_to '次のページ', search_index_path(page: @page + 1, latitude: params[:latitude], longitude: params[:longitude], distance: params[:distance]) %>
+    <% end %>
+  </div>
+  <footer>
+    <p>Powered by <a href="http://webservice.recruit.co.jp/">ホットペッパーグルメ Webサービス</a></p>
+  </footer>
+</div>

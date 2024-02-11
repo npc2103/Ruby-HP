@@ -1,0 +1,59 @@
+<div class="header">
+  <header>
+    <h1>Finding Yummy</h1>
+  </header>
+</div>
+<h2><%= resource_name.to_s.humanize %>の編集</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%= f.label :email, "メールアドレス" %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>現在、以下のメールアドレスの確認を待っています: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password, "パスワード" %> <i>(変更しない場合は空白にしてください)</i><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <br />
+      <em>最低 <%= @minimum_password_length %> 文字必要</em>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation, "パスワード確認" %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password, "現在のパスワード" %> <i>(変更を確認するために現在のパスワードが必要です)</i><br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :username, "ユーザーネームの変更" %><br />
+    <%= f.text_field :username, autocomplete: "username" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "更新" %>
+  </div>
+<% end %>
+
+<h3>アカウントの消去</h3>
+
+<div>アカウントを消去しますか？ <%= button_to "アカウントの消去", registration_path(resource_name), data: { confirm: "本当によろしいですか？", turbo_confirm: "本当によろしいですか？" }, method: :delete %></div>
+
+<%= link_to "戻る", :back %>
+
+<div class="footer_area">
+  <footer>
+      <p>Powered by <a href="http://webservice.recruit.co.jp/">ホットペッパーグルメ Webサービス</a></p>
+  </footer>
+</div>
